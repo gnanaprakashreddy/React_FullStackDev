@@ -1,5 +1,6 @@
 import React from "react";
-import {Card,CardImg,CardTitle,CardBody,CardText,Media,} from "reactstrap";
+import {Card,CardImg,CardTitle,CardBody,CardText,Media,Breadcrumb, BreadcrumbItem} from "reactstrap";
+import {Link} from 'react-router-dom';
   
   function FormatDate({date}) {
     var options = { year: "numeric", month: "short", day: "numeric" };
@@ -21,28 +22,39 @@ import {Card,CardImg,CardTitle,CardBody,CardText,Media,} from "reactstrap";
     return card;
   }
   function RenderComments({comments}) {
-    const dishComments = comments.map((c) => {
+    console.log(comments);
       return (
       <Media left body>
-        <p>{c.comment}</p>
+        <p>{comments.comment}</p>
         <p>
-          -- {c.author}, <FormatDate date={c.date}/>
+          -- {comments.author}, <FormatDate date={comments.date}/>
         </p>
       </Media>
       )
-    });
-    return dishComments;
   }
 
   const DishDetail = (props) => {
     if (props.dish == null) return <div></div>;
+    // console.log(props.comment)
+    const comments = props.comment.map(c => <RenderComments comments={c}/>)
+
     return (
       <div class="container">
+        <div className="row">
+            <Breadcrumb>
+                <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+            </Breadcrumb>
+            <div className="col-12">
+                <h3>{props.dish.name}</h3>
+                <hr />
+            </div> 
+        </div>
         <div className="row">
           <RenderCard dish={props.dish}/>
           <div className="col-12 col-md-5 m-1"> 
             <h4>Comments</h4>
-            <Media list><RenderComments comments={props.dish.comments}/></Media>
+            <Media list>{comments}</Media>
           </div>
         </div>
       </div>   
