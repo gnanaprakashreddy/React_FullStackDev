@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardImg, CardText, CardBody,
-    CardTitle, Breadcrumb, BreadcrumbItem, Media, MediaBody, Button, Modal, ModalHeader, ModalBody, Row, Col, Label } from 'reactstrap';
+    CardTitle, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Label } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 
@@ -27,11 +27,11 @@ class CommentForm extends Component {
       }
 
     handleSubmit(values) {
-        console.log('Current State is: ' + JSON.stringify(values));
-        alert('Current State is: ' + JSON.stringify(values));
+        
         this.setState({
             isModalOpen: !this.state.isModalOpen
         });
+        this.props.addComment(this.props.dishId, values.rating, values.author, values.message)
     }
 
       render() {
@@ -108,7 +108,8 @@ class CommentForm extends Component {
                 );
         }
 
-        function RenderComments({comments}) {
+        function RenderComments({comments,addComment,dishId}) {
+            console.log(dishId);
             const dispcomment = comments.map((comment) => {
                 return(
                     <div>
@@ -124,7 +125,7 @@ class CommentForm extends Component {
             return(
                 <div>
                     { dispcomment }
-                    <CommentForm />
+                    <CommentForm dishId={dishId} addComment={addComment}/>
                 </div>
             );
         }
@@ -149,7 +150,7 @@ class CommentForm extends Component {
                   </div>
                   <div className="col-12 col-md-5 m-1">
                       <h4>Comments</h4>
-                      <RenderComments comments={props.comment} />
+                      <RenderComments comments={props.comment} addComment ={props.addComment} dishId={props.dish.id}/>
                   </div>
               </div>
           </div>
